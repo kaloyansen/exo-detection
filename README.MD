@@ -1,2 +1,2 @@
 ## en-ligne à
-https://freeshell.de/morla/detect
+freeshell.de/morla/detect

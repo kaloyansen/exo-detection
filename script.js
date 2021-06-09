@@ -79,18 +79,20 @@ class Tonneau {
     detectionSurface = () => {
         let x = this.posX;
         let y = this.posY;
+        let deltax = x + getJusTheNumber(this.t.style.width);
 
         platforms.forEach((pl) => {
             let x1, x2, y1, y2
-            let inx, iny, inxy;
-            inx = iny = inxy = false;
+            let inx, indeltax, iny, surfaceDetected;
+            inx = indeltax = iny = surfaceDetected = false;
             y1 = pl.top;
             y2 = y1 + heightPlatform;
             if (pl.left) {
                 x1 = pl.left;
                 x2 = x1 + pl.width;
             } else if (pl.right) {
-                x2 = getStyleValue(screen.style.width) - pl.right;
+                //x2 = getJusTheNumber(screen.style.width) - pl.right;
+                x2 = widthScreen - pl.right;
                 x1 = x2 - pl.width;
             } else {
                 console.error('wtf');
@@ -98,22 +100,29 @@ class Tonneau {
 
             if (x1 < x && x < x2) inx = true;
             if (y1 < y && y < y2) iny = true;
-            inxy = inx && iny;
+            if (x1 < deltax && deltax < x2) indeltax = true;/* this is not a point
+                                                               here i take care of the x-dimension */
+            surfaceDetected = (inx || indeltax) && iny;
 
-            if (inxy) {
-                console.log(`hit: x[${x1}:${x2}] y[${y1}:${y2}]`);
+            if (surfaceDetected) {
+                console.log(`hit: x:${x} in [${x1}:${x2}] y:${y} in [${y1}:${y2}]`);
                 // If surface detected
                 //clearInterval(this.intervalID);
-                toggleColor(this.t.style);
-                //this.t.style.backgroundColor = "red";
+                togColor(this.t.style);
+                pl.style.backgroundColor = 'orange';
             }
         });
     }
 }
 
-function toggleColor(jack) {
-    if (jack.backgroundColor == "red") jack.backgroundColor = "green";
-    else jack.backgroundColor = "red";
+function togColor(jack) {
+    if (jack.backgroundColor == "transparent") {
+        jack.backgroundColor = "green";
+        jack.border = "1px solid black";
+    } else {
+        jack.backgroundColor = "transparent";
+        jack.border = "1px solid transparent";
+    }
 }
 
 function generateTonneau() {
@@ -124,7 +133,7 @@ function generateTonneau() {
     }, 2000);
 }
 
-function getStyleValue(eleparam) { return parseInt(eleparam.replace('px', ''), 10); }
+function getJusTheNumber(eleparam, unit = 'px', hmm = 10) { return parseInt(eleparam.replace(unit, ''), hmm); }
 
 // Append the platform
 platforms.forEach(d => screen.appendChild(createPlatorm(d)))

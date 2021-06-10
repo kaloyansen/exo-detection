@@ -102,9 +102,9 @@ class Tonneau {
             const inx = x1 < x && x < x2;
             const iny = y1 < y && y < y2;
             const indeltax = x1 < deltax && deltax < x2; /* {this} is not a point
-                                                            y a deux degrées de liberté
+                                                            it is a two-dimensional object
+                                                            il a deux degrées de liberté
                                                             here i take care of the x-dimension */
-            
             const surfaceDetected = (inx || indeltax) && iny;
 
             if (surfaceDetected) {

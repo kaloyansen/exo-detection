@@ -77,38 +77,41 @@ class Tonneau {
 
     // TODO
     detectionSurface = () => {
+
         let x = this.posX;
         let y = this.posY;
         let deltax = x + getJusTheNumber(this.t.style.width);
 
         platforms.forEach((pl) => {
-            let x1, x2, y1, y2
-            let inx, indeltax, iny, surfaceDetected;
-            inx = indeltax = iny = surfaceDetected = false;
-            y1 = pl.top;
-            y2 = y1 + heightPlatform;
+
+            let x1 = 0;
+            let x2 = 0;
             if (pl.left) {
                 x1 = pl.left;
                 x2 = x1 + pl.width;
             } else if (pl.right) {
-                //x2 = getJusTheNumber(screen.style.width) - pl.right;
                 x2 = widthScreen - pl.right;
                 x1 = x2 - pl.width;
             } else {
                 console.error('wtf');
             }
 
-            if (x1 < x && x < x2) inx = true;
-            if (y1 < y && y < y2) iny = true;
-            if (x1 < deltax && deltax < x2) indeltax = true;/* this is not a point
-                                                               here i take care of the x-dimension */
-            surfaceDetected = (inx || indeltax) && iny;
+            const y1 = pl.top;
+            const y2 = y1 + heightPlatform;
+
+            const inx = x1 < x && x < x2;
+            const iny = y1 < y && y < y2;
+            const indeltax = x1 < deltax && deltax < x2; /* {this} is not a point
+                                                            y a deux degrées de liberté
+                                                            here i take care of the x-dimension */
+            
+            const surfaceDetected = (inx || indeltax) && iny;
 
             if (surfaceDetected) {
                 console.log(`hit: x:${x} in [${x1}:${x2}] y:${y} in [${y1}:${y2}]`);
-                // If surface detected
-                //clearInterval(this.intervalID);
-                togColor(this.t.style);
+                /* If surface detected
+                   clearInterval(this.intervalID); */
+                togColor(this.t);
                 pl.style.backgroundColor = 'orange';
             }
         });
@@ -116,12 +119,12 @@ class Tonneau {
 }
 
 function togColor(jack) {
-    if (jack.backgroundColor == "transparent") {
-        jack.backgroundColor = "green";
-        jack.border = "1px solid black";
+    if (jack.style.backgroundColor == "transparent") {
+        jack.style.backgroundColor = "green";
+        jack.style.border = "1px solid black";
     } else {
-        jack.backgroundColor = "transparent";
-        jack.border = "1px solid transparent";
+        jack.style.backgroundColor = "transparent";
+        jack.style.border = "transparent";
     }
 }
 
